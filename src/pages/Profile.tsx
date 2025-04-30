@@ -5,14 +5,18 @@ import authInstance from '../keycloak';
 
 
 try {
-    const authenticated = await authInstance.init({onLoad: 'login-required'});
+    const authenticated = await authInstance.init({onLoad: 'login-required', pkceMethod: 'S256', checkLoginIframe: false});
     console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
   } catch (error) {
       console.error('Failed to initialize adapter:', error);
   }
 
-export default function Home() {
+export default function Profile() {
   const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
+
+
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-500">
@@ -27,27 +31,7 @@ export default function Home() {
                 </div>
             )}
 
-            <Button
-                variant='secondary'
-                size='sm'
-                className='mt-3'
-                fullWidth
-                onClick={() => authInstance.login()}
-            >
-                Войти
-            </Button>
-
-            <Button
-                variant='secondary'
-                size='sm'
-                className='mt-3'
-                fullWidth
-
-            >
-                Войти
-            </Button>
-
-
+            <div>SECURE</div>
         </div>
     </div>
   )
