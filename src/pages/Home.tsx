@@ -1,18 +1,42 @@
-import { useState } from 'react'
 import Button from '../components/ui/Button'
-
 import authInstance from '../keycloak';
+import { useKeycloak } from "@react-keycloak/web";
+import { useNavigate } from "react-router-dom";
 
+const SignInButton = () => {
+    return (
+        <Button
+            variant='secondary'
+            size='sm'
+            className='mt-3'
+            fullWidth
+            onClick={() => authInstance.login(
+                {
+                    redirectUri: 'http://localhost:5173/user'
+                }
+            )}
+        >
+        Войти
+    </Button>
+    )
+}
 
-try {
-    const authenticated = await authInstance.init({onLoad: 'login-required'});
-    console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
-  } catch (error) {
-      console.error('Failed to initialize adapter:', error);
-  }
+const SingUpButton = () => {
+    return (
+        <Button
+            variant='secondary'
+            size='sm'
+            className='mt-3'
+            fullWidth
+            onClick={() => authInstance.register()}
+        >
+        Создать аккаунт
+    </Button>
+    )
+}
+
 
 export default function Home() {
-  const [error, setError] = useState('')
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-500">
@@ -20,32 +44,9 @@ export default function Home() {
             <h2 className="text-2xl font-bold mb-6 text-center text-black">
                 batori UI
             </h2>
-            
-            {error && (
-                <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
-                {error}
-                </div>
-            )}
 
-            <Button
-                variant='secondary'
-                size='sm'
-                className='mt-3'
-                fullWidth
-                onClick={() => authInstance.login()}
-            >
-                Войти
-            </Button>
-
-            <Button
-                variant='secondary'
-                size='sm'
-                className='mt-3'
-                fullWidth
-
-            >
-                Войти
-            </Button>
+            <SignInButton />
+            <SingUpButton />
 
 
         </div>
