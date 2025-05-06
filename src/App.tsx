@@ -1,32 +1,36 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import Profile from './pages/Profile';
-import authInstance from './keycloak';
-import keycloak from './config/keycloak';
-
-
-async function initKC() {
-  try {
-    const authenticated = await authInstance.init({ onLoad: 'check-sso' });
-    console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
-  } catch (error) {
-      console.error('Failed to initialize adapter:', error);
-  }
-  
-}
+import { ReactKeycloakProvider } from '@react-keycloak/web';
+import keycloak from './keycloak';
+import React from 'react';
+import PrivateRoute from './helpers/PrivateRoute';
 
 function App() {
-
-  initKC();
+  
   return (
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/user" element={<Profile/>} />
-          
-        </Routes>
-      </BrowserRouter>
-  );
+    <ReactKeycloakProvider 
+      authClient={keycloak}
+      initOptions={{ 
+        onLoad: 'check-sso',
+        checkLoginIframe: false,
+      }}
+    >
+      <React.StrictMode>
+          <BrowserRouter>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <PrivateRoute>
+                    <Home />
+                  </PrivateRoute>
+                }
+              />
+            </Routes>
+          </BrowserRouter>
+        </React.StrictMode>
+    </ReactKeycloakProvider>  
+);
 }
 
-export default App
+export default App;

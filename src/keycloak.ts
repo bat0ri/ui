@@ -6,6 +6,6 @@ const keycloakSetting = {
     clientId: "frontend-client-id",
 };
 
-const authInstance = new Keycloak(keycloakSetting)
+const keycloak = new Keycloak(keycloakSetting)
   
-export default authInstance;
+export default keycloak;
